@@ -12,6 +12,9 @@ namespace _07LabExer1
 {
     public partial class FrmClubRegistration : Form
     {
+        private ClubRegistrationQuery clubRegistrationQuery;
+
+        int ID,
         public FrmClubRegistration()
         {
             InitializeComponent();
