@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.SqlClient;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -13,13 +14,33 @@ namespace _07LabExer1
     public partial class FrmUpdateMember : Form
     {
         private int memberID;
+        private SqlCommand sqlCommand;
         private ClubRegistrationQuery clubRegistrationQuery = new ClubRegistrationQuery();
+        private SqlDataReader sqlDataReader;
+        private SqlConnection sqlConnect;
+        private string connectionString =
+       @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\Arnel_Carbonell\source\repos\07LabExer1\07LabExer1\ClubDB.mdf; Integrated Security=True";
 
         public FrmUpdateMember(int id)
         {
             InitializeComponent();
             memberID = id;
         }
+
+        private void LoadStudentIDs()
+        {
+            cbStudNum.Items.Clear();
+            sqlConnect.Open();
+            sqlCommand = new SqlCommand("SELECT StudentID FROM ClubMembers", sqlConnect);
+            sqlDataReader = sqlCommand.ExecuteReader();
+            while (sqlDataReader.Read())
+            {
+                cbStudNum.Items.Add(sqlDataReader["StudentID"].ToString());
+            }
+            sqlDataReader.Close();
+            sqlConnect.Close();
+        }
+
 
         private void cbGender_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -28,6 +49,8 @@ namespace _07LabExer1
 
         private void FrmUpdateMember_Load(object sender, EventArgs e)
         {
+            sqlConnect = new SqlConnection(connectionString);
+            LoadStudentIDs();
             clubRegistrationQuery.DisplayList();
             DataTable dt = clubRegistrationQuery.dataTable;
 
