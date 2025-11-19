@@ -46,16 +46,13 @@ namespace _07LabExer1
             return true;
         }
 
-        public bool RegistrationStudent( int ID, long StudentID, string FirstName, string MiddleName, string LastName, int Age, string Gender, string Program) {
-
-            sqlCommand = new SqlCommand("INSERT INTO ClubMembers VALUES(@ID, @StudentID, @FirstName, @MiddleName, @LastName, @Age, @Gender, @Program)", sqlConnect);
-
-            sqlCommand.Parameters.Add("@ID", SqlDbType.Int).Value = ID;
-            sqlCommand.Parameters.Add("@StudentID", SqlDbType.Int).Value = StudentID;
+        public bool RegistrationStudent(int ID, long StudentID, string FirstName, string MiddleName, string LastName, int Age, string Gender, string Program)
+        {
 
 
 
 
             return true;
+        }
     }
 }
