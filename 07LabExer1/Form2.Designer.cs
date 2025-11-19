@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.lblStudNo1 = new System.Windows.Forms.Label();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.cbStudNum = new System.Windows.Forms.ComboBox();
             this.txtLastN = new System.Windows.Forms.TextBox();
             this.lblLastN = new System.Windows.Forms.Label();
             this.txtFirstN = new System.Windows.Forms.TextBox();
@@ -55,13 +55,13 @@
             this.lblStudNo1.TabIndex = 50;
             this.lblStudNo1.Text = "Student No:";
             // 
-            // comboBox1
+            // cbStudNum
             // 
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(13, 30);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(246, 21);
-            this.comboBox1.TabIndex = 51;
+            this.cbStudNum.FormattingEnabled = true;
+            this.cbStudNum.Location = new System.Drawing.Point(13, 30);
+            this.cbStudNum.Name = "cbStudNum";
+            this.cbStudNum.Size = new System.Drawing.Size(246, 21);
+            this.cbStudNum.TabIndex = 51;
             // 
             // txtLastN
             // 
@@ -167,6 +167,7 @@
             this.cbProg.Name = "cbProg";
             this.cbProg.Size = new System.Drawing.Size(243, 21);
             this.cbProg.TabIndex = 66;
+            this.cbProg.SelectedIndexChanged += new System.EventHandler(this.cbProg_SelectedIndexChanged);
             // 
             // lblProg2
             // 
@@ -180,12 +181,14 @@
             // 
             // btnConfirm
             // 
+            this.btnConfirm.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnConfirm.Location = new System.Drawing.Point(109, 463);
             this.btnConfirm.Name = "btnConfirm";
             this.btnConfirm.Size = new System.Drawing.Size(112, 38);
             this.btnConfirm.TabIndex = 67;
             this.btnConfirm.Text = "Confirm";
             this.btnConfirm.UseVisualStyleBackColor = true;
+            this.btnConfirm.Click += new System.EventHandler(this.btnConfirm_Click);
             // 
             // FrmUpdateMember
             // 
@@ -205,10 +208,11 @@
             this.Controls.Add(this.lblFirstN);
             this.Controls.Add(this.txtLastN);
             this.Controls.Add(this.lblLastN);
-            this.Controls.Add(this.comboBox1);
+            this.Controls.Add(this.cbStudNum);
             this.Controls.Add(this.lblStudNo1);
             this.Name = "FrmUpdateMember";
             this.Text = "FrmUpdateMember";
+            this.Load += new System.EventHandler(this.FrmUpdateMember_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -217,7 +221,7 @@
         #endregion
 
         private System.Windows.Forms.Label lblStudNo1;
-        private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.ComboBox cbStudNum;
         private System.Windows.Forms.TextBox txtLastN;
         private System.Windows.Forms.Label lblLastN;
         private System.Windows.Forms.TextBox txtFirstN;

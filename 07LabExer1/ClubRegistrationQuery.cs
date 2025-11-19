@@ -14,79 +14,87 @@ namespace _07LabExer1
         private SqlConnection sqlConnect;
         private SqlConnection sqlCommand;
         private SqlDataAdapter sqlAdapter;
-        private SqlDataReader sqlDataReader;
+        public DataTable dataTable = new DataTable();
+        public BindingSource bindingSource = new BindingSource();
+        private string connectionString =
+        @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\Arnel_Carbonell\source\repos\07LabExer1\07LabExer1\ClubDB.mdf; Integrated Security=True";
 
-        public DataTable dataTable;
-        public BindingSource bindingSource;
-
-        private string connectionString;
 
         public ClubRegistrationQuery()
         {
-            connectionString = @"Data Source=LAB-A-PC00;
-            Initial Catalog=ClubDB19;
-            User ID=carbonell.m;
-            Password=12345;";
-
             sqlConnect = new SqlConnection(connectionString);
             dataTable = new DataTable();
-            bindingSource = new BindingSource();
+            bindingSource.DataSource = dataTable;
         }
 
         public bool DisplayList()
         {
-            string query = "SELECT StudentID, FirstName, MiddleName, LastName, Age, Gender, Program FROM ClubMembers";
-
-            sqlAdapter = new SqlDataAdapter(query, sqlConnect);
-
+         
+            string viewClubMembers =
+                "SELECT ID, StudentID, FirstName, MiddleName, LastName, Age, Gender, Program FROM ClubMembers";
+            sqlAdapter = new SqlDataAdapter(viewClubMembers, sqlConnect);
             dataTable.Clear();
             sqlAdapter.Fill(dataTable);
             bindingSource.DataSource = dataTable;
-
             return true;
         }
 
-        public bool RegistrationStudent(int ID, long StudentID, string FirstName, string MiddleName, string LastName, int Age, string Gender, string Program)
+        public bool RegisterStudent(int ID, long StudentID, string FirstName, string MiddleName, string LastName, int Age,
+            string Gender, string Program)
         {
+            string registerMember =
+                "INSERT INTO ClubMembers (ID, StudentID, FirstName, MiddleName, LastName, Age, Gender, Program) " +
+                "VALUES (@ID, @StudentID, @FirstName, @MiddleName, @LastName, @Age, @Gender, @Program)";
+            using (SqlCommand sqlCmd = new SqlCommand(registerMember, sqlConnect))
+            {
+                sqlCmd.Parameters.Add("@ID", SqlDbType.Int).Value = ID;
+                sqlCmd.Parameters.Add("@StudentID", SqlDbType.BigInt).Value = StudentID;
+                sqlCmd.Parameters.Add("@FirstName", SqlDbType.NVarChar, 50).Value = FirstName;
+                sqlCmd.Parameters.Add("@MiddleName", SqlDbType.NVarChar, 50).Value = MiddleName;
+                sqlCmd.Parameters.Add("@LastName", SqlDbType.NVarChar, 50).Value = LastName;
+                sqlCmd.Parameters.Add("@Age", SqlDbType.Int).Value = Age;
+                sqlCmd.Parameters.Add("@Gender", SqlDbType.NVarChar, 10).Value = Gender;
+                sqlCmd.Parameters.Add("@Program", SqlDbType.NVarChar, 50).Value = Program;
 
-            sqlCommand = new SqlCommand("INSERT INTO ClubMembers VALUES(@ID, @StudentID, @FirstName, @MiddleName, @LastName, @Age, @Gender, @Program)", sqlConnect);
-
-            sqlCommand.Parameters.Add("@ID", SqlDbType.Int).Value = ID;
-            sqlCommand.Parameters.Add("@StudentID", SqlDbType.BigInt).Value = StudentID;
-            sqlCommand.Parameters.Add("@FirstName", SqlDbType.VarChar).Value = FirstName;
-            sqlCommand.Parameters.Add("@MiddleName", SqlDbType.VarChar).Value = MiddleName;
-            sqlCommand.Parameters.Add("@LastName", SqlDbType.VarChar).Value = LastName;
-            sqlCommand.Parameters.Add("@Age", SqlDbType.Int).Value = Age;
-            sqlCommand.Parameters.Add("@Gender", SqlDbType.VarChar).Value = Age;
-            sqlCommand.Parameters.Add("@Program", SqlDbType.VarChar).Value = Program;
-
-            sqlConnect.Open();
-            sqlCommand.ExecuteNonQuery();
-            sqlConnect.Close();
-
-
-            return true;
+                sqlConnect.Open();
+                int rowsAffected = sqlCmd.ExecuteNonQuery();
+                sqlConnect.Close();
+                return rowsAffected > 0;
+            }
         }
 
-        public bool UpdateMember (long StudentID, string FirstName, string MiddleName, string LastName, int Age, string Gender, string Program)
+        public bool UpdateMember(int ID, long StudentID, string FirstName, string MiddleName, string LastName, int Age,
+            string Gender, string Program)
         {
-            sqlCommand = new SqlCommand("UPDATE ClubMembers SET FirstName=@FirstName, MiddleName=@MiddleName, LastName=@LastName, " + "Age=@Age, Gender=@Gender, Program=@Program WHERE StudentID=@StudentID", sqlConnect);
-            sqlCommand.Parameters.Add("@StudentID", SqlDbType.BigInt).Value = StudentID;
-            sqlCommand.Parameters.Add("@FirstName", SqlDbType.VarChar).Value = FirstName;
-            sqlCommand.Parameters.Add("@MiddleName", SqlDbType.VarChar).Value = MiddleName;
-            sqlCommand.Parameters.Add("@LastName", SqlDbType.VarChar).Value = LastName;
-            sqlCommand.Parameters.Add("@Age", SqlDbType.Int).Value = Age;
-            sqlCommand.Parameters.Add("@Gender", SqlDbType.VarChar).Value = Age;
-            sqlCommand.Parameters.Add("@Program", SqlDbType.VarChar).Value = Program;
+            string updateMember =
+                "UPDATE ClubMembers SET StudentID=@StudentID, FirstName=@FirstName, MiddleName=@MiddleName," +
+                " LastName=@LastName, Age=@Age, Gender=@Gender, Program=@Program WHERE ID=@ID";
+            using (SqlCommand sqlCmd = new SqlCommand(updateMember, sqlConnect))
+            {
+                sqlCmd.Parameters.Add("@StudentID", SqlDbType.BigInt).Value = StudentID;
+                sqlCmd.Parameters.Add("@FirstName", SqlDbType.NVarChar, 50).Value = FirstName;
+                sqlCmd.Parameters.Add("@MiddleName", SqlDbType.NVarChar, 50).Value = MiddleName;
+                sqlCmd.Parameters.Add("@LastName", SqlDbType.NVarChar, 50).Value = LastName;
+                sqlCmd.Parameters.Add("@Age", SqlDbType.Int).Value = Age;
+                sqlCmd.Parameters.Add("@Gender", SqlDbType.NVarChar, 10).Value = Gender;
+                sqlCmd.Parameters.Add("@Program", SqlDbType.NVarChar, 50).Value = Program;
+                sqlCmd.Parameters.Add("@ID", SqlDbType.Int).Value = ID;
 
-            sqlConnect.Open();
-            sqlCommand.ExecuteNonQuery();
-            sqlConnect.Close();
-
-
-            return true;
+                sqlConnect.Open();
+                int rowsAffected = sqlCmd.ExecuteNonQuery();
+                sqlConnect.Close();
+                return rowsAffected > 0;
+            }
         }
+    }
+
+
+
+
+
+
+
 
 
     }
-}
+
